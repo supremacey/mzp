@@ -1,6 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.animation as animation
+import mpl_toolkits.mplot3d.axes3d as p3
 import shared.euler as elr
 #------------------------------
 # y_v - system of equations, here an x' and V'
@@ -24,17 +25,27 @@ y = y0.copy()
 
 f = lambda iv, y_v : np.array([y_v[1], -(k/m)*y[0] - (b/m)*y_v[1]])
 step = 0.01  # step for integration fun
-integr = elr.heun
+integr = elr.rk4
 #------------------------------
 w = 7
 h = 5
+
 fig = plt.figure()
-ax = plt.axes(xlim=[-w, w], ylim=[-h,h])
-ax.grid()
-ax.invert_yaxis()
-position, = ax.plot([],[], 'bo-', lw=2)
-velocity, = ax.plot([],[], 'go-', lw=2)
-acceleration, = ax.plot([],[], 'ro-', lw=2)
+ax = p3.Axes3D(fig)
+# Setting the axes properties
+ax.set_xlim3d([-w, w])
+ax.set_xlabel('X')
+
+ax.set_ylim3d([-w, w])
+ax.set_ylabel('Y')
+
+ax.set_zlim3d([-h, h])
+ax.set_zlabel('Z')
+
+ax.set_title('3D Spring')
+# ax.grid()
+ax.invert_zaxis()
+position, = ax.plot([],[],[], 'bo-', lw=2)
 
 fps = int(1/step)
 time = 10  # time in seconds
@@ -48,21 +59,16 @@ def init():
     print("Total time:", uptime, "s")
     uptime += Δt
     y = y0.copy()
-    position.set_data([],[])
-    velocity.set_data([],[])
-    acceleration.set_data([],[])
-    return position, velocity, acceleration
+    position.set_data([0, 0], [0, 0])
+    position.set_3d_properties([x0, y[0]])
+    return position,
 
 def frame(i, step):
     global y
-    # print("Frame", i)
-    ny = integr(i*step, y, step, f)  # y = [position, velocity]
-    a = f(i*step, y)[-1]
-    position.set_data([2, 2], [x0, ny[0]])
-    velocity.set_data([0, 0], [0, ny[1]])
-    acceleration.set_data([-2, -2], [0, a/10])
-    y = ny
-    return position, velocity, acceleration
+    y = integr(i*step, y, step, f)  # y = [position, velocity]
+    position.set_data([0, 0], [0, 0])
+    position.set_3d_properties([x0, y[0]])
+    return position,
 
 anim = animation.FuncAnimation(
             fig,
