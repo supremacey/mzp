@@ -3,10 +3,6 @@ import matplotlib.pyplot as plt
 import matplotlib.animation as animation
 import shared.euler as elr
 #------------------------------
-# y_v - system of equations, here an x' and V'
-# def euler(iv, y_v, step, f):
-    # return y_v + step * f(iv, y_v) 
-
 g = 9.8
 L = 3  # resting length of string
 ΔL = 1  # spring delta uder a mass
@@ -27,9 +23,9 @@ y4 = y0.copy()
 y5 = y0.copy()
 
 f = lambda iv, y_v : np.array([y_v[1], -(k/m)*y_v[0] - (b/m)*y_v[1]])
-step = 0.0001  # step for integration fun
+step = 0.01  # step for integration fun
 int1 = elr.euler
-int2 = elr.heun
+int2 = elr.heun2
 int3 = elr.midpnt
 int4 = elr.back
 int5 = elr.rk4
@@ -117,7 +113,7 @@ anim = animation.FuncAnimation(
             fargs = (step,),
             interval = 1000*step,
             init_func = init,
-            blit=False
+            blit=True
         )
 
 plt.show()

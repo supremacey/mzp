@@ -7,7 +7,7 @@ def euler(val_x, val_y, step, fun):
     """
     return val_y + step * fun(val_x, val_y)
 
-def heun(val_x, val_y, step, fun):
+def heun2(val_x, val_y, step, fun):
     """
         Heun's method
         or predictor-corector method
