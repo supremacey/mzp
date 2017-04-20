@@ -1,2 +1,2 @@
 # Modelowanie Zjawisk Przyrodniczych
-![](https://i.imgur.com/OUkLi.gif "Hello World!")
+![](https://i.imgur.com/q4twgLJ.gif "Hello World!")
