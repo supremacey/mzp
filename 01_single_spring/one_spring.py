@@ -32,21 +32,34 @@ fig = plt.figure()
 ax = plt.axes(xlim=[-w, w], ylim=[-h,h])
 ax.grid()
 ax.invert_yaxis()
+fig.suptitle("Spring movement w/ Heun 2nd order method.", fontsize=14)
 position, = ax.plot([],[], 'bo-', lw=2)
 velocity, = ax.plot([],[], 'go-', lw=2)
 acceleration, = ax.plot([],[], 'ro-', lw=2)
 
 fps = int(1/step)
-time = 10  # time in seconds
+time = 20  # time in seconds
 
-Δt = 5
-uptime = 0
+ax.text(-4, x0-0.2, "Acceleration/10",
+        verticalalignment='bottom',
+        horizontalalignment='center',
+        fontsize=10)
+ax.text(0, x0-0.2, "Velocity/5",
+        verticalalignment='bottom',
+        horizontalalignment='center',
+        fontsize=10)
+ax.text(4, x0-0.2, "Position",
+        verticalalignment='bottom',
+        horizontalalignment='center',
+        fontsize=10)
+
+ax.text(-5, 4, "Step size [s]: " + str(step),
+        verticalalignment='bottom',
+        horizontalalignment='center',
+        fontsize=10)
 
 
 def init():
-    global uptime 
-    print("Total time:", uptime, "s")
-    uptime += Δt
     y = y0.copy()
     position.set_data([],[])
     velocity.set_data([],[])
@@ -58,9 +71,9 @@ def frame(i, step):
     # print("Frame", i)
     ny = integr(i*step, y, step, f)  # y = [position, velocity]
     a = f(i*step, y)[-1]
-    position.set_data([2, 2], [x0, ny[0]])
-    velocity.set_data([0, 0], [0, ny[1]])
-    acceleration.set_data([-2, -2], [0, a/10])
+    position.set_data([4, 4], [x0, ny[0]])
+    velocity.set_data([0, 0], [0, ny[1]/5])
+    acceleration.set_data([-4, -4], [0, a/10])
     y = ny
     return position, velocity, acceleration
 
@@ -74,9 +87,9 @@ anim = animation.FuncAnimation(
             blit=True
         )
 
-plt.show()
-# anim.save(
-        # 'single.mp4',
-        # fps=fps,
-        # extra_args=['-vcodec', 'libx264']
-    # )
+# plt.show()
+anim.save(
+        'single.mp4',
+        fps=fps,
+        extra_args=['-vcodec', 'libx264']
+    )
