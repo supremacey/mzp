@@ -61,7 +61,7 @@ p1, = ax.plot([],[], 'mo', lw=2)
 p2, = ax.plot([],[], 'co', lw=2)
 
 fps = int(1/step)
-Δt = 5
+Δt = 20
 uptime = 0
 
 def init():
@@ -92,9 +92,9 @@ anim = animation.FuncAnimation(
             blit=True
         )
 
-plt.show()
-# anim.save(
-        # 'double.mp4',
-        # fps=fps,
-        # extra_args=['-vcodec', 'libx264']
-    # )
+# plt.show()
+anim.save(
+        'double.mp4',
+        fps=fps,
+        extra_args=['-vcodec', 'libx264']
+    )

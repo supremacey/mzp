@@ -24,7 +24,7 @@ y = y0.copy()
 
 f = lambda iv, y_v : np.array([y_v[1], -(k/m)*y[0] - (b/m)*y_v[1]])
 step = 0.01  # step for integration fun
-integr = elr.heun
+integr = elr.heun2
 #------------------------------
 w = 7
 h = 5

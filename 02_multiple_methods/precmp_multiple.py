@@ -3,6 +3,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.animation as animation
 import shared.euler as elr
+import shared.precomp as pc
 #------------------------------
 g = 9.8     # gravity acceleration
 L = 3       # resting length of string
@@ -30,25 +31,12 @@ fps = int(1000/interval)      # animation frames per second
 frames = time * fps
 amul = max(1, int(int_frames/frames))    # animation multiplier
 
-def prcmp(method, init_conditions, diff_fun, stp, frms):
-    """
-        Precomputes motion for each frame of animation
-    """
-    sz, = init_conditions.shape
-    motion = np.zeros((frms, sz))
-
-    motion[0] = init_conditions.copy()
-    for i in range(1,frms):
-        motion[i] = method(i*stp, motion[i-1], stp, diff_fun) 
-
-    return motion
-
 # numerical integration methods:
-y1 = prcmp(elr.euler, y0, f, step, int_frames)     # Euler's method
-y2 = prcmp(elr.heun2, y0, f, step, int_frames)     # Heun's 2nd order method
-y3 = prcmp(elr.midpnt, y0, f, step, int_frames)    # Midpoint Euler's method
-y4 = prcmp(elr.back, y0, f, step, int_frames)      # Backward Euler's method
-y5 = prcmp(elr.rk4, y0, f, step, int_frames)       # Runge-Kutta 4 method
+y1 = pc.prcmp(elr.euler, y0, f, step, int_frames)     # Euler's method
+y2 = pc.prcmp(elr.heun2, y0, f, step, int_frames)     # Heun's 2nd order method
+y3 = pc.prcmp(elr.midpnt, y0, f, step, int_frames)    # Midpoint Euler's method
+y4 = pc.prcmp(elr.back, y0, f, step, int_frames)      # Backward Euler's method
+y5 = pc.prcmp(elr.rk4, y0, f, step, int_frames)       # Runge-Kutta 4 method
 
 a1 = y1[::amul, :]
 a2 = y2[::amul, :]
@@ -110,16 +98,16 @@ def frame(i, step):
 anim = animation.FuncAnimation(
             fig,
             func = frame,
-            frames = fps*time,
+            frames = frames,
             fargs = (step,),
             interval = 1000*step,
             blit=True
         )
 
-# plt.show()
+plt.show()
 
-anim.save(
-        'multiple03.mp4',
-        fps=fps,
-        extra_args=['-vcodec', 'libx264']
-    )
+# anim.save(
+        # 'multiple03.mp4',
+        # fps=fps,
+        # extra_args=['-vcodec', 'libx264']
+    # )
